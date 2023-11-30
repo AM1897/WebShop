@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
+@Entity
 @Table(name = "shopping_cart_items")
 public class ShoppingCartItem {
 

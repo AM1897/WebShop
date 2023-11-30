@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,7 +22,7 @@ public class ShoppingCart {
     private UserEntity user;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
-    private Set<ShoppingCartItem> items;
+    private List<ShoppingCartItem> items;
 
 }
 
