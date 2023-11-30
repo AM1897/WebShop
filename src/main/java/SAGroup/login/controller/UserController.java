@@ -1,83 +1,125 @@
 package SAGroup.login.controller;
 
 import SAGroup.login.filter.PasswordValidator;
-import SAGroup.login.model.AuthRequest;
-import SAGroup.login.model.Roles;
+import SAGroup.login.model.ChangingPassword;
 import SAGroup.login.model.UserEntity;
-import SAGroup.login.service.JWTService;
 import SAGroup.login.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
-// UserController is a REST controller that handles user-related requests.
-// It is annotated with @RestController to indicate that it's a controller where every method returns a domain object instead of a view.
-// It's also annotated with @RequestMapping("/users") to map web requests onto specific handler classes and/or handler methods.
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/users")
 public class UserController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final JWTService jwtService;
+    private final UserService userService;
 
-    // Constructor for UserController, it takes an AuthenticationManager, UserService, PasswordEncoder, and JWTService as parameters.
-    public UserController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder, JWTService jwtService) {
-        this.authenticationManager = authenticationManager;
-        this.userService = userService;
+
+    public UserController(PasswordEncoder passwordEncoder, UserService userService) {
         this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
+        this.userService = userService;
     }
 
-    //----------------------------------------------------------------------
-    // Login and register Methods here...
-    //----------------------------------------------------------------------
-    // The register method handles the registration of new users.
-    // It checks if the username already exists, if not, it creates a new user with the provided details.
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthRequest user) {
 
-        if (userService.existsByUsername(user.getUsername())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @GetMapping("/{name}")
+    public ResponseEntity<UserEntity> getUserByName(@PathVariable String name) {
+        UserEntity user = userService.findByUsername(name);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } else {
-
-            String badPass = PasswordValidator.validatePassword(user.getPassword());
-            if (!badPass.equals("")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badPass);
-            }
-            UserEntity newUser = new UserEntity();
-            newUser.setUsername(user.getUsername());
-            newUser.setRole(Roles.ROLE_USER);
-            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-
-            userService.save(newUser);
-            return ResponseEntity.status(HttpStatus.OK).body("Registration successful!");
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
     }
 
-    // The authAndGetToken method handles the authentication of users.
-    // It authenticates the user and if successful, generates a JWT token for the user.
-    // Here you can ask for payment or something else before generating the token.
-    @PostMapping("/login")
-    public ResponseEntity<String> authAndGetToken(@RequestBody AuthRequest authRequest) {
-        try {
-            Authentication authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
-            if (authentication.isAuthenticated()) {
-                return new ResponseEntity<>(jwtService.generateToken(authRequest.getUsername()), HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong username or password");
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @GetMapping("/all")
+    public ResponseEntity<List<UserEntity>> getAllUsers() {
+        if (userService.findAll() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong username or password");
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserEntity> deleteUser(@PathVariable Long id) {
+        if (userService.existsById(id)) {
+            userService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateUserById(@PathVariable Long id, @RequestBody UserEntity updatedUser) {
+        if (updatedUser.getPassword() != null) {
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+
+        if (userService.existsById(id)) {
+            UserEntity newUser = userService.findById(id).get();
+            // that will make it easier to update the user, if the field is null, it will not be updated
+            if (updatedUser.getPassword() == null) updatedUser.setPassword(newUser.getPassword());
+            if (updatedUser.getRole() == null) updatedUser.setRole(newUser.getRole());
+            if (updatedUser.getUsername() == null) updatedUser.setUsername(newUser.getUsername());
+
+            userService.updateUserById(id, updatedUser);
+            return new ResponseEntity<>("Done!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/me")
+    public ResponseEntity<String> deleteUser(Principal principal) {
+        String username = principal.getName();
+        UserEntity user = userService.findByUsername(username);
+        if (user != null) {
+            userService.deleteById(user.getId());
+            return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PutMapping("/changePass")
+    public ResponseEntity<String> changeUserPass(Principal principal, @RequestBody ChangingPassword changingPassword) {
+        UserEntity user = userService.findByUsername(principal.getName());
+        String oldPass = changingPassword.getOldPassword();
+        String newPass = changingPassword.getNewPassword();
+        String confirmPass = changingPassword.getConfirmPassword();
+
+        if (passwordEncoder.matches(oldPass, user.getPassword())) {
+            if (newPass.equals(confirmPass)) {
+                String badPass = PasswordValidator.validatePassword(newPass);
+                if (!badPass.equals("")) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badPass);
+                }
+                user.setPassword(passwordEncoder.encode(newPass));
+                userService.save(user);
+                return ResponseEntity.status(HttpStatus.OK).body("Password changed successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("New password and confirm password do not match");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password is incorrect");
+        }
     }
 }
