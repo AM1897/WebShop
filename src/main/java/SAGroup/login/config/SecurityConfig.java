@@ -55,7 +55,6 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable());
         httpSecurity.authorizeHttpRequests(auth ->{
                 auth.requestMatchers(AUTH_WHITELIST).permitAll();
-                auth.requestMatchers("/error").permitAll();
                 auth.anyRequest().authenticated();
                 });
 
