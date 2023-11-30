@@ -28,16 +28,14 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private JWTAuthFilter jwtAuthFilter;
     private static final String[] AUTH_WHITELIST = {
-            "/",
-            "index.html",
-            "style.css",
-            "/users/register",
-            "/users/login",
+            "/auth/register",
+            "/auth/login",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",
             "/configuration/security",
-            "/swagger-ui.html",
+            "/swagger-ui",
+            "/swagger-ui/",
             "/webjars/**",
             "/v3/api-docs/**",
             "/swagger-ui/**"

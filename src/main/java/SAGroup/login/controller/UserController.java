@@ -21,7 +21,7 @@ import java.util.List;
 // It is annotated with @RestController to indicate that it's a controller where every method returns a domain object instead of a view.
 // It's also annotated with @RequestMapping("/users") to map web requests onto specific handler classes and/or handler methods.
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth")
 public class UserController {
 
     private final AuthenticationManager authenticationManager;
