@@ -19,6 +19,7 @@ public class UserEntity {
     @Getter
     @Setter
     private Roles role;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private ShoppingCart shoppingCart;
 

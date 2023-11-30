@@ -2,11 +2,11 @@ package SAGroup.webShop.repository;
 
 
 import SAGroup.webShop.model.Article;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    // Här kan du lägga till anpassade frågor, t.ex. för att hitta artiklar efter namn
-    // List<Article> findByNameContaining(String name);
+    boolean existsByName(String name);
 }
 
