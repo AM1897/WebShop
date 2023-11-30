@@ -53,8 +53,11 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.csrf(csrf -> csrf.disable());
-        httpSecurity.authorizeHttpRequests(auth ->
-                auth.requestMatchers(AUTH_WHITELIST).permitAll().anyRequest().authenticated());
+        httpSecurity.authorizeHttpRequests(auth ->{
+                auth.requestMatchers(AUTH_WHITELIST).permitAll();
+                auth.requestMatchers("/error").permitAll();
+                auth.anyRequest().authenticated();
+                });
 
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.userDetailsService(userDetailsService);
