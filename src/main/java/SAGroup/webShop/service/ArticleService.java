@@ -1,9 +1,13 @@
 package SAGroup.webShop.service;
 
 
-import SAGroup.repository.ArticleRepository;
+
+import SAGroup.webShop.model.Article;
+import SAGroup.webShop.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ArticleService {
@@ -15,8 +19,19 @@ public class ArticleService {
         this.articleRepository = articleRepository;
     }
 
-    // Metoder för att hantera artikelrelaterade operationer
-    // public Article createArticle(Article article) { ... }
-    // public Article getArticleById(Long id) { ... }
-    // ...
+    public List<Article> getAllArticles() {
+        return articleRepository.findAll();
+    }
+
+    public Article getArticleById(Long id) {
+        return articleRepository.findById(id).orElse(null);
+    }
+
+    public Article saveArticle(Article article) {
+        return articleRepository.save(article);
+    }
+
+    public void deleteArticle(Long id) {
+        articleRepository.deleteById(id);
+    }
 }

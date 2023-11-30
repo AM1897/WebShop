@@ -1,6 +1,6 @@
 package SAGroup.webShop.controller;
 
-import SAGroup.model.ShoppingCartItem;
+import SAGroup.webShop.model.ShoppingCartItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

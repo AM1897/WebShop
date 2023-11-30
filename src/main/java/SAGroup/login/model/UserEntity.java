@@ -1,5 +1,6 @@
 package SAGroup.login.model;
 
+import SAGroup.webShop.model.ShoppingCart;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -18,4 +19,7 @@ public class UserEntity {
     @Getter
     @Setter
     private Roles role;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private ShoppingCart shoppingCart;
+
 }

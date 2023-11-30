@@ -1,6 +1,7 @@
 package SAGroup.webShop.repository;
 
-import SAGroup.model.Article;
+
+import SAGroup.webShop.model.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {

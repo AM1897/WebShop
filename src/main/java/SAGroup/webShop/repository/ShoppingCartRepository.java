@@ -1,6 +1,7 @@
 package SAGroup.webShop.repository;
 
-import SAGroup.model.ShoppingCart;
+
+import SAGroup.webShop.model.ShoppingCart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {

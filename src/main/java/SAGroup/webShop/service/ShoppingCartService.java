@@ -1,8 +1,12 @@
 package SAGroup.webShop.service;
 
-import SAGroup.repository.ShoppingCartRepository;
+
+import SAGroup.webShop.model.ShoppingCart;
+import SAGroup.webShop.repository.ShoppingCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ShoppingCartService {
@@ -14,9 +18,20 @@ public class ShoppingCartService {
         this.shoppingCartRepository = shoppingCartRepository;
     }
 
-    // Metoder för att hantera kundkorgsrelaterade operationer
-    // public ShoppingCart addArticleToCart(Long userId, ShoppingCartItem item) { ... }
-    // public ShoppingCart removeArticleFromCart(Long userId, Long itemId) { ... }
-    // ...
+    public List<ShoppingCart> getAllShoppingCarts() {
+        return shoppingCartRepository.findAll();
+    }
+
+    public ShoppingCart getShoppingCartById(Long id) {
+        return shoppingCartRepository.findById(id).orElse(null);
+    }
+
+    public ShoppingCart saveShoppingCart(ShoppingCart shoppingCart) {
+        return shoppingCartRepository.save(shoppingCart);
+    }
+
+    public void deleteShoppingCart(Long id) {
+        shoppingCartRepository.deleteById(id);
+    }
 }
 
