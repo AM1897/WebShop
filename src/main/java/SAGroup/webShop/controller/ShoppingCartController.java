@@ -3,6 +3,7 @@ package SAGroup.webShop.controller;
 import SAGroup.login.model.UserEntity;
 import SAGroup.login.repo.UserRepo;
 import SAGroup.webShop.model.ShoppingCart;
+import SAGroup.webShop.model.ShoppingCartDTO;
 import SAGroup.webShop.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,21 @@ public class ShoppingCartController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PostMapping("/{articleId}")
+    public ResponseEntity<String> addArticleToShoppingCart(Principal principal, @PathVariable Long articleId) {
+
+        UserEntity user = userRepo.findByUsername(principal.getName()).orElse(null);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        shoppingCartService.addArticleToShoppingCart(user.getId(), articleId);
+        return ResponseEntity.ok("Article added to the shopping cart successfully");
+    }
+
+
+
+
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
@@ -74,11 +90,10 @@ public class ShoppingCartController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/{id}")
-    public ResponseEntity<ShoppingCart> getShoppingCartById(@PathVariable Long id) {
-        return shoppingCartService.getShoppingCartById(id)
-                .map(shoppingCart -> new ResponseEntity<>(shoppingCart, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    @GetMapping("/all")
+    public ResponseEntity<List<ShoppingCartDTO>> getShoppingCartById() {
+        List<ShoppingCartDTO> userShoppingCarts = shoppingCartService.getUserShoppingCarts();
+        return new ResponseEntity<>(userShoppingCarts, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

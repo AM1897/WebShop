@@ -4,6 +4,7 @@ import SAGroup.login.model.UserEntity;
 import SAGroup.login.service.UserService;
 import SAGroup.webShop.model.Article;
 import SAGroup.webShop.model.ShoppingCart;
+import SAGroup.webShop.model.ShoppingCartDTO;
 import SAGroup.webShop.repository.ShoppingCartRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,13 @@ public class ShoppingCartService {
     private final ShoppingCartRepo shoppingCartRepo;
     private final UserService userService;
 
+    private final ArticleService articleService;
+
     @Autowired
-    public ShoppingCartService(ShoppingCartRepo shoppingCartRepo, UserService userService) {
+    public ShoppingCartService(ShoppingCartRepo shoppingCartRepo, UserService userService, ArticleService articleService) {
         this.shoppingCartRepo = shoppingCartRepo;
         this.userService = userService;
+        this.articleService = articleService;
     }
 
     public ShoppingCart createShoppingCart(UserEntity user) {
@@ -37,10 +41,6 @@ public class ShoppingCartService {
         List<Article> articles = new ArrayList<>();
         shoppingCart.setArticles(articles);
 
-        // Save the user with the associated shopping cart
-        user1.setShoppingCart(shoppingCart);
-        userService.save(user1);
-
         return shoppingCartRepo.save(shoppingCart);
     }
 
@@ -53,13 +53,48 @@ public class ShoppingCartService {
         return null;
     }
 
-    public List<ShoppingCart> getAllShoppingCarts() {
-        return shoppingCartRepo.findAll();
+    public List<ShoppingCartDTO> getUserShoppingCarts() {
+        List<ShoppingCart> shoppingCarts = shoppingCartRepo.findAll();
+        List<ShoppingCartDTO> userShoppingCarts = new ArrayList<>();
+
+        for (ShoppingCart cart : shoppingCarts) {
+            UserEntity user = cart.getUser(); // Assuming there is a user associated with the shopping cart
+
+            ShoppingCartDTO userShoppingCartDTO = new ShoppingCartDTO();
+            userShoppingCartDTO.setUserId(user.getId());
+            userShoppingCartDTO.setCartId(cart.getId());
+            userShoppingCartDTO.setArticles(cart.getArticles()); // Assuming articles is a collection in the ShoppingCart entity
+
+            userShoppingCarts.add(userShoppingCartDTO);
+        }
+
+        return userShoppingCarts;
     }
 
-    public Optional<ShoppingCart> getShoppingCartById(Long id) {
-        return shoppingCartRepo.findById(id);
+
+
+
+
+    public void addArticleToShoppingCart(Long userId, Long articleId) {
+        UserEntity user = userService.findById(userId).orElse(null);
+        if (user == null) {
+            return;
+        }
+        Article article = articleService.findById(articleId);
+
+        ShoppingCart shoppingCart = user.getShoppingCart();
+        if (shoppingCart == null) {
+            shoppingCart = new ShoppingCart();
+            shoppingCart.setUser(user);
+        }
+
+        shoppingCart.getArticles().add(article);
+        shoppingCartRepo.save(shoppingCart);
     }
+
+
+
+
 
 
     public ShoppingCart updateShoppingCart(Long id, ShoppingCart updatedShoppingCart) {
