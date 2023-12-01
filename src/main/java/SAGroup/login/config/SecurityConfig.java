@@ -31,7 +31,7 @@ public class SecurityConfig {
             "/auth/register",
             "/auth/login",
             "/articles",
-            "/shoppingcart",
+            "/articles/**",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",

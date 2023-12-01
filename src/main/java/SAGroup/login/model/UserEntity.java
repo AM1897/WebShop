@@ -1,6 +1,7 @@
 package SAGroup.login.model;
 
 import SAGroup.webShop.model.ShoppingCart;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class UserEntity {
     @Setter
     private Roles role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private ShoppingCart shoppingCart;
 }
