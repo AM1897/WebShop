@@ -6,6 +6,9 @@ import SAGroup.login.model.Roles;
 import SAGroup.login.model.UserEntity;
 import SAGroup.login.service.JWTService;
 import SAGroup.login.service.UserService;
+import SAGroup.webShop.model.ShoppingCart;
+import SAGroup.webShop.repository.ShoppingCartRepository;
+import SAGroup.webShop.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,12 +29,16 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
 
+    private final ShoppingCartService shoppingCartService;
+
     // Constructor for UserController, it takes an AuthenticationManager, UserService, PasswordEncoder, and JWTService as parameters.
-    public AuthController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder, JWTService jwtService) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder, JWTService jwtService, ShoppingCartRepository shoppingCartRepository, ShoppingCartService shoppingCartService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+
+        this.shoppingCartService = shoppingCartService;
     }
 
     //----------------------------------------------------------------------
@@ -55,7 +62,15 @@ public class AuthController {
             newUser.setRole(Roles.ROLE_USER);
             newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
+            ShoppingCart shoppingCart = new ShoppingCart();
+            shoppingCart.setOwner(newUser.getUsername());
+
             userService.save(newUser);
+            shoppingCartService.save(shoppingCart);
+
+
+
+
             return ResponseEntity.status(HttpStatus.OK).body("Registration successful!");
         }
     }

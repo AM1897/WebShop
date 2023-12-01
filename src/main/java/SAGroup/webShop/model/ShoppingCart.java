@@ -17,12 +17,10 @@ public class ShoppingCart {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
     private List<ShoppingCartItem> items;
 
+    @Column(name = "owner")
+    private String owner;
 }
 
