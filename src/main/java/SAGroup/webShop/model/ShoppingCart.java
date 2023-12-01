@@ -1,26 +1,29 @@
 package SAGroup.webShop.model;
 
+import SAGroup.login.model.Roles;
 import SAGroup.login.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
-
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
 
-@Data
+
 @Entity
-@Table(name = "shopping_carts")
+@Table(name = "shoppingCarts")
+@Data
 public class ShoppingCart {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
-    private List<ShoppingCartItem> items;
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
 
-    @Column(name = "owner")
-    private String owner;
+    @OneToMany(targetEntity = Article.class, cascade = CascadeType.ALL)
+    private List<Article> articles;
+
 }
-

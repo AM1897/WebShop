@@ -12,7 +12,7 @@ import lombok.Setter;
 public class UserEntity {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String password;
@@ -20,4 +20,6 @@ public class UserEntity {
     @Setter
     private Roles role;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private ShoppingCart shoppingCart;
 }

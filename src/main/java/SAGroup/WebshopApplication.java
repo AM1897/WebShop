@@ -3,8 +3,6 @@ package SAGroup;
 import SAGroup.login.model.Roles;
 import SAGroup.login.model.UserEntity;
 import SAGroup.login.service.UserService;
-import SAGroup.webShop.model.Article;
-import SAGroup.webShop.service.ArticleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +17,7 @@ public class WebshopApplication {
 	private final PasswordEncoder passwordEncoder;
 
 
-	public WebshopApplication(UserService userService, PasswordEncoder passwordEncoder, ArticleService articleService) {
+	public WebshopApplication(UserService userService, PasswordEncoder passwordEncoder) {
 		this.userService = userService;
 		this.passwordEncoder = passwordEncoder;
 	}

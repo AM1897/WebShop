@@ -2,32 +2,21 @@ package SAGroup.webShop.model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import net.bytebuddy.build.HashCodeAndEqualsPlugin;
 
-@Data
 @Entity
 @Table(name = "articles")
+@Data
 public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
-    private Double cost;
-
     private String description;
+    private String price;
+    private int amount;
 
 
-    public Article(String name, Double cost, String description) {
-        this.name = name;
-        this.cost = cost;
-        this.description = description;
-    }
-
-    public Article() {
-    }
 }
