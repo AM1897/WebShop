@@ -6,7 +6,7 @@ import SAGroup.login.model.Roles;
 import SAGroup.login.model.UserEntity;
 import SAGroup.login.service.JWTService;
 import SAGroup.login.service.UserService;
-import SAGroup.webShop.model.ShoppingCart;
+import SAGroup.webShop.controller.ShoppingCartController;
 import SAGroup.webShop.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +27,14 @@ public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
-
     private final ShoppingCartService shoppingCartService;
 
     // Constructor for UserController, it takes an AuthenticationManager, UserService, PasswordEncoder, and JWTService as parameters.
-    public AuthController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder, JWTService jwtService, ShoppingCartService shoppingCartService) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder, JWTService jwtService, ShoppingCartController shoppingCart, ShoppingCartService shoppingCartService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-
         this.shoppingCartService = shoppingCartService;
     }
 
@@ -62,6 +60,8 @@ public class AuthController {
             newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
             userService.save(newUser);
+
+            shoppingCartService.createShoppingCart(newUser);
 
             return ResponseEntity.status(HttpStatus.OK).body("Registration successful!");
         }

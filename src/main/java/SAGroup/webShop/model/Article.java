@@ -16,7 +16,6 @@ public class Article {
     private String name;
     private String description;
     private String price;
-    private int amount;
 
 
 }

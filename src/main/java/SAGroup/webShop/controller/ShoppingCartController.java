@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/shopping-carts")
 public class ShoppingCartController {
@@ -27,7 +26,7 @@ public class ShoppingCartController {
         this.userRepo = userRepo;
     }
 
-
+    // It's not needed because when the user is created the shopping cart is created automatically.
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<ShoppingCart> createShoppingCart(Principal principal) {
@@ -45,6 +44,7 @@ public class ShoppingCartController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("")
     public ResponseEntity<ShoppingCart> getShoppingCartForCurrentUser(Principal principal) {
@@ -74,24 +74,9 @@ public class ShoppingCartController {
         return ResponseEntity.ok("Article added to the shopping cart successfully");
     }
 
-
-
-
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/{id}")
-    public ResponseEntity<ShoppingCart> updateShoppingCart(@PathVariable Long id, @RequestBody ShoppingCart updatedShoppingCart) {
-        ShoppingCart updated = shoppingCartService.updateShoppingCart(id, updatedShoppingCart);
-        if (updated != null) {
-            return new ResponseEntity<>(updated, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
-    public ResponseEntity<List<ShoppingCartDTO>> getShoppingCartById() {
+    public ResponseEntity<List<ShoppingCartDTO>> getAllShoppingCarts() {
         List<ShoppingCartDTO> userShoppingCarts = shoppingCartService.getUserShoppingCarts();
         return new ResponseEntity<>(userShoppingCarts, HttpStatus.OK);
     }
