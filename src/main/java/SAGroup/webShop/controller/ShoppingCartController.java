@@ -63,14 +63,14 @@ public class ShoppingCartController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @PostMapping("/{articleId}")
-    public ResponseEntity<String> addArticleToShoppingCart(Principal principal, @PathVariable Long articleId) {
+    @PostMapping("/{articleId}/{quantity}")
+    public ResponseEntity<String> addArticleToShoppingCart(Principal principal, @PathVariable Long articleId, @PathVariable int quantity) {
 
         UserEntity user = userRepo.findByUsername(principal.getName()).orElse(null);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        shoppingCartService.addArticleToShoppingCart(user.getId(), articleId);
+        shoppingCartService.addArticleToShoppingCart(user.getId(), articleId, quantity);
         return ResponseEntity.ok("Article added to the shopping cart successfully");
     }
 

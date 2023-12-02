@@ -1,6 +1,7 @@
 package SAGroup.webShop.controller;
 
 import SAGroup.webShop.model.Article;
+import SAGroup.webShop.model.ArticleDTO;
 import SAGroup.webShop.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,8 @@ public class ArticleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Article>> getAllArticles() {
-        List<Article> articles = articleService.getAllArticles();
+    public ResponseEntity<List<ArticleDTO>> getAllArticles() {
+        List<ArticleDTO> articles = articleService.getAllArticles();
         return new ResponseEntity<>(articles, HttpStatus.OK);
     }
 

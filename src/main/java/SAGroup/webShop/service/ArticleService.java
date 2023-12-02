@@ -1,10 +1,12 @@
 package SAGroup.webShop.service;
 
 import SAGroup.webShop.model.Article;
+import SAGroup.webShop.model.ArticleDTO;
 import SAGroup.webShop.repository.ArticleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -17,8 +19,13 @@ public class ArticleService {
         this.articleRepo = articleRepo;
     }
 
-    public List<Article> getAllArticles() {
-        return articleRepo.findAll();
+    public List<ArticleDTO> getAllArticles() {
+        List<Article> articles = articleRepo.findAll();
+        List<ArticleDTO> dtos = new ArrayList<>();
+        for (Article article : articles) {
+            dtos.add(convertToDTO(article));
+        }
+        return dtos;
     }
 
     public Optional<Article> getArticleById(Long id) {
@@ -45,5 +52,15 @@ public class ArticleService {
 
     public Article findById(Long articleId) {
         return articleRepo.findById(articleId).orElse(null);
+    }
+
+
+    public ArticleDTO convertToDTO(Article article) {
+        ArticleDTO dto = new ArticleDTO();
+        dto.setId(article.getId());
+        dto.setName(article.getName());
+        dto.setDescription(article.getDescription());
+        dto.setPrice(article.getPrice());
+        return dto;
     }
 }

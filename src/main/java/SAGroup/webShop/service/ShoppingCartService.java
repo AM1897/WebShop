@@ -72,23 +72,41 @@ public class ShoppingCartService {
     }
 
 
+    public double calculateTotalPrice(Long userId) {
+        ShoppingCart shoppingCart = shoppingCartRepo.findByUser_Id(userId).orElse(null);
+        if (shoppingCart == null) {
+            return 0;
+        }
+
+        double totalPrice = 0;
+        for (Article article : shoppingCart.getArticles()) {
+            totalPrice += Double.parseDouble(article.getPrice()) * article.getAmount();
+        }
+
+        return totalPrice;
+    }
 
 
 
-    public void addArticleToShoppingCart(Long userId, Long articleId) {
+    public void addArticleToShoppingCart(Long userId, Long articleId, int quantity) {
         UserEntity user = userService.findById(userId).orElse(null);
         if (user == null) {
             return;
         }
         Article article = articleService.findById(articleId);
-
         ShoppingCart shoppingCart = user.getShoppingCart();
-        if (shoppingCart == null) {
-            shoppingCart = new ShoppingCart();
-            shoppingCart.setUser(user);
+
+        Optional<Article> existingArticle = shoppingCart.getArticles().stream()
+                .filter(a -> a.getId().equals(articleId))
+                .findFirst();
+
+        if (existingArticle.isPresent()) {
+            existingArticle.get().setAmount(existingArticle.get().getAmount() + quantity);
+        } else {
+            article.setAmount(quantity);
+            shoppingCart.getArticles().add(article);
         }
 
-        shoppingCart.getArticles().add(article);
         shoppingCartRepo.save(shoppingCart);
     }
 
