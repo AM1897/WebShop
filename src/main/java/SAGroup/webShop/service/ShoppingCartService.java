@@ -29,28 +29,37 @@ public class ShoppingCartService {
     }
 
     public ShoppingCart createShoppingCart(UserEntity user) {
-        UserEntity user1 = userService.findByUsername(user.getUsername());
+        // Hitta användaren baserat på användarnamnet
+        UserEntity userEntity = userService.findByUsername(user.getUsername());
 
-        if (user1 == null) {
+        // Kontrollera om användaren existerar
+        if (userEntity == null) {
+            // Om användaren inte finns, hantera det på lämpligt sätt (kasta ett undantag, returnera null, etc.)
             return null;
         }
 
+        // Kontrollera om användaren redan har en kundkorg
+        if (userEntity.getShoppingCart() != null) {
+            // Användaren har redan en kundkorg, så vi behöver inte skapa en ny
+            // Här kan du antingen returnera den befintliga kundkorgen eller hantera det på något annat sätt
+            return userEntity.getShoppingCart();
+        }
+
+        // Skapa en ny kundkorg om användaren inte har en
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setUser(user1);
+        shoppingCart.setUser(userEntity);
+        shoppingCart.setArticles(new ArrayList<>()); // Initiera med en tom artikel-lista
 
-        List<Article> articles = new ArrayList<>();
-        shoppingCart.setArticles(articles);
-
+        // Spara den nya kundkorgen i databasen
         return shoppingCartRepo.save(shoppingCart);
     }
 
     public Optional<ShoppingCart> getShoppingCartByUserId(Long userId) {
-
-        ShoppingCart shoppingCart = shoppingCartRepo.findByUser_Id(userId).orElse(null);
-        if (shoppingCart != null) {
-            return shoppingCartRepo.findByUser_Id(userId);
-        }
-        return null;
+        // Hämta kundkorgen baserat på användar-ID
+        Optional<ShoppingCart> shoppingCart = shoppingCartRepo.findByUser_Id(userId);
+        // Returnera resultatet direkt
+        // Optional-handlingen är redan null-säker
+        return shoppingCart;
     }
 
     public List<ShoppingCartDTO> getUserShoppingCarts() {
@@ -59,18 +68,19 @@ public class ShoppingCartService {
 
         for (ShoppingCart cart : shoppingCarts) {
             UserEntity user = cart.getUser(); // Assuming there is a user associated with the shopping cart
+            if (user != null) { // kontrollerar att varje kundkorg har en användare
+                ShoppingCartDTO userShoppingCartDTO = new ShoppingCartDTO();
+                userShoppingCartDTO.setUserId(user.getId());
+                userShoppingCartDTO.setCartId(cart.getId());
+                userShoppingCartDTO.setArticles(cart.getArticles()); // Assuming articles is a collection in the ShoppingCart entity
 
-            ShoppingCartDTO userShoppingCartDTO = new ShoppingCartDTO();
-            userShoppingCartDTO.setUserId(user.getId());
-            userShoppingCartDTO.setCartId(cart.getId());
-            userShoppingCartDTO.setArticles(cart.getArticles()); // Assuming articles is a collection in the ShoppingCart entity
+                userShoppingCarts.add(userShoppingCartDTO);
+            }
 
-            userShoppingCarts.add(userShoppingCartDTO);
         }
 
         return userShoppingCarts;
     }
-
 
     public double calculateTotalPrice(Long userId) {
         ShoppingCart shoppingCart = shoppingCartRepo.findByUser_Id(userId).orElse(null);
@@ -85,8 +95,6 @@ public class ShoppingCartService {
 
         return totalPrice;
     }
-
-
 
     public void addArticleToShoppingCart(Long userId, Long articleId, int quantity) {
         UserEntity user = userService.findById(userId).orElse(null);
@@ -109,11 +117,6 @@ public class ShoppingCartService {
 
         shoppingCartRepo.save(shoppingCart);
     }
-
-
-
-
-
 
     public ShoppingCart updateShoppingCart(Long id, ShoppingCart updatedShoppingCart) {
         if (shoppingCartRepo.existsById(id)) {
