@@ -1,33 +1,28 @@
 package SAGroup.webShop.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import SAGroup.login.model.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.List;
 
-import java.util.Set;
 
 @Entity
-@Table(name = "shopping_carts")
+@Table(name = "shoppingCarts")
+@Data
 public class ShoppingCart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JsonBackReference
+    private UserEntity user;
 
-    @OneToMany(mappedBy = "shoppingCart")
-    private Set<ShoppingCartItem> items;
+    @OneToMany(targetEntity = Article.class, cascade = CascadeType.ALL)
+    private List<Article> articles;
 
-    // Standard getters och setters
-    // ...
 }
-

@@ -16,6 +16,7 @@ public class WebshopApplication {
 	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
 
+
 	public WebshopApplication(UserService userService, PasswordEncoder passwordEncoder) {
 		this.userService = userService;
 		this.passwordEncoder = passwordEncoder;
@@ -37,7 +38,6 @@ public class WebshopApplication {
 				ObjectMapper objectMapper = new ObjectMapper();
 				String adminJson = objectMapper.writeValueAsString(admin);
 				userService.saveJson(adminJson);
-
 			}
 		};
 	}
