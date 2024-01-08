@@ -1,30 +1,21 @@
 package SAGroup.webShop.model;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Data;
+import net.bytebuddy.build.HashCodeAndEqualsPlugin;
 
 @Entity
 @Table(name = "articles")
+@Data
 public class Article {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
-    private Double cost;
-
-    @Column(length = 500)
     private String description;
+    private String price;
+    private int amount;
 
-    // Standard getters och setters
-    // ...
 }
