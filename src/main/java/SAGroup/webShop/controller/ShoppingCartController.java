@@ -2,6 +2,7 @@ package SAGroup.webShop.controller;
 
 import SAGroup.login.model.UserEntity;
 import SAGroup.login.repo.UserRepo;
+import SAGroup.webShop.model.CheckoutHistoryDTO;
 import SAGroup.webShop.model.ShoppingCart;
 import SAGroup.webShop.model.ShoppingCartDTO;
 import SAGroup.webShop.service.ShoppingCartService;
@@ -87,4 +88,32 @@ public class ShoppingCartController {
         shoppingCartService.deleteShoppingCart(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+
+
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PostMapping("/checkout")
+    public ResponseEntity<String> checkout(Principal principal) {
+        UserEntity user = userRepo.findByUsername(principal.getName()).orElse(null);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        System.out.println("User id: " + user.getId() + " Username: " + user.getUsername() + " is about to checkout");
+        shoppingCartService.checkout(user.getId());
+        return ResponseEntity.ok("Checkout successful");
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @GetMapping("/checkout")
+    public ResponseEntity<List <CheckoutHistoryDTO>> checkoutHistory(Principal principal) {
+        UserEntity user = userRepo.findByUsername(principal.getName()).orElse(null);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        System.out.println("Username: " + user.getUsername() + " checkout history: " );
+        return ResponseEntity.ok(shoppingCartService.checkoutHistory(user.getUsername()));
+    }
+
 }
