@@ -41,7 +41,7 @@ public class ShoppingCartController {
         if (createdShoppingCart != null) {
             return new ResponseEntity<>(createdShoppingCart, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

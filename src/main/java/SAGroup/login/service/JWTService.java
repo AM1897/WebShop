@@ -82,6 +82,9 @@ public class JWTService {
     // extractAllClaims method extracts all claims from the given JWT token.
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(getSecritkey()).build().parseClaimsJws(token).getBody();
+
+
+
     }
 
     // isTokenExpired method checks if the given JWT token is expired.
