@@ -111,11 +111,6 @@ public class ShoppingCartService {
         shoppingCartRepo.save(shoppingCart);
     }
 
-
-
-
-
-
     public ShoppingCart updateShoppingCart(Long id, ShoppingCart updatedShoppingCart) {
         if (shoppingCartRepo.existsById(id)) {
             updatedShoppingCart.setId(id);
@@ -128,13 +123,6 @@ public class ShoppingCartService {
     public void deleteShoppingCart(Long id) {
         shoppingCartRepo.deleteById(id);
     }
-
-
-
-
-
-
-
 
     public void checkout(Long id) {
         ShoppingCart shoppingCart = shoppingCartRepo.findByUser_Id(id).orElse(null);
@@ -162,8 +150,6 @@ public class ShoppingCartService {
             checkoutHistoryRepo.save(checkoutHistory);
 
 
-            // Lägg till artikel & User i orderhistorik
-            // orderHistoryService.addArticleToOrderHistory(articleDTO, user);
         });
 
         // Rensa shoppingcart
@@ -172,9 +158,6 @@ public class ShoppingCartService {
     }
 
     public List<CheckoutHistoryDTO> checkoutHistory(String userName) {
-
-
-
 
         // Hämta userName
         List <CheckoutHistoryDTO> historyDTO = new ArrayList<>();
