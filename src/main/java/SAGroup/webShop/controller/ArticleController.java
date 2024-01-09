@@ -3,6 +3,7 @@ package SAGroup.webShop.controller;
 import SAGroup.webShop.model.Article;
 import SAGroup.webShop.model.ArticleDTO;
 import SAGroup.webShop.service.ArticleService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
+
+    @PostConstruct
+    public void init() {
+
+        if (articleService.getAllArticles().isEmpty()) {
+        Article article1 = new Article();
+        article1.setName("Book1");
+        article1.setDescription("Author1");
+        article1.setPrice("10");
+        article1.setAmount(10);
+
+        Article article2 = new Article();
+        article2.setName("Book2");
+        article2.setDescription("Author2");
+        article2.setPrice("20");
+        article2.setAmount(20);
+
+        Article article3 = new Article();
+        article3.setName("Book3");
+        article3.setDescription("Author3");
+        article3.setPrice("30");
+        article3.setAmount(30);
+
+            articleService.createArticle(article1);
+            articleService.createArticle(article2);
+            articleService.createArticle(article3);
+        }
+
+    }
 
     private final ArticleService articleService;
 

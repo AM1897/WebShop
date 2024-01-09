@@ -2,6 +2,7 @@ package SAGroup.webShop.model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import net.bytebuddy.build.HashCodeAndEqualsPlugin;
 
