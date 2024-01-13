@@ -32,16 +32,3 @@ public class CheckoutHistory {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

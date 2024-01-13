@@ -16,9 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-// UserController is a REST controller that handles user-related requests.
-// It is annotated with @RestController to indicate that it's a controller where every method returns a domain object instead of a view.
-// It's also annotated with @RequestMapping("/users") to map web requests onto specific handler classes and/or handler methods.
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -29,7 +26,6 @@ public class AuthController {
     private final JWTService jwtService;
     private final ShoppingCartService shoppingCartService;
 
-    // Constructor for UserController, it takes an AuthenticationManager, UserService, PasswordEncoder, and JWTService as parameters.
     public AuthController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder, JWTService jwtService, ShoppingCartController shoppingCart, ShoppingCartService shoppingCartService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
@@ -38,11 +34,7 @@ public class AuthController {
         this.shoppingCartService = shoppingCartService;
     }
 
-    //----------------------------------------------------------------------
-    // Login and register Methods here...
-    //----------------------------------------------------------------------
-    // The register method handles the registration of new users.
-    // It checks if the username already exists, if not, it creates a new user with the provided details.
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AuthRequest user) {
 
@@ -67,9 +59,6 @@ public class AuthController {
         }
     }
 
-    // The authAndGetToken method handles the authentication of users.
-    // It authenticates the user and if successful, generates a JWT token for the user.
-    // Here you can ask for payment or something else before generating the token.
     @PostMapping("/login")
     public ResponseEntity<String> authAndGetToken(@RequestBody AuthRequest authRequest) {
         try {

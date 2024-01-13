@@ -15,11 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-// SecurityConfig is a configuration class for Spring Security.
-// It is annotated with @Configuration to indicate that it's a source of bean definitions.
-// It is also annotated with
-// @EnableWebSecurity and
-// @EnableMethodSecurity to enable Spring Security's web security support and enable method level security respectively.
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -42,14 +37,12 @@ public class SecurityConfig {
             "/swagger-ui/**"
     };
 
-    // Constructor for SecurityConfig, it takes a UserDetailsService and a JWTAuthFilter as parameters.
+
     public SecurityConfig(UserDetailsService userDetailsService, JWTAuthFilter jwtAuthFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
-    // filterChain method configures the HttpSecurity to use JWT for security.
-    // It disables CSRF, sets session management to stateless, and adds the JWTAuthFilter before the UsernamePasswordAuthenticationFilter.
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
@@ -68,14 +61,11 @@ public class SecurityConfig {
 
     }
 
-    // passwordEncoder method provides a BCryptPasswordEncoder bean.
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // authenticationProvider method provides a DaoAuthenticationProvider bean.
-    // It sets the UserDetailsService and PasswordEncoder for the DaoAuthenticationProvider.
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
