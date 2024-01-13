@@ -144,7 +144,7 @@ public class ShoppingCartService {
             int amount = article.getAmount();
 
             CheckoutHistory checkoutHistory = new CheckoutHistory(user,
-                    articleDTO.getId(), articleDTO.getName(), articleDTO.getDescription(), articleDTO.getPrice()
+                     articleDTO.getName(), articleDTO.getDescription(), articleDTO.getPrice()
                     , amount);
 
             checkoutHistoryRepo.save(checkoutHistory);

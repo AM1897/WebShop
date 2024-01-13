@@ -22,9 +22,8 @@ public class CheckoutHistory {
 
     private String user;
 
-    public CheckoutHistory(String user, Long id, String name, String description, String price, int amount) {
+    public CheckoutHistory(String user, String name, String description, String price, int amount) {
         this.user = user;
-        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
