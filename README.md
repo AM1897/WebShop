@@ -1,5 +1,5 @@
 # WebShop
-Team Work Samer - Aram - Karim Kozo
+Team Work Samer - Aram - Kerim Kozo
 
 # WebshopApplication
 
