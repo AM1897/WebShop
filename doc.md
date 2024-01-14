@@ -1,44 +1,58 @@
-# Samer - Aram - Karim Kozo
-
+# Samer - Aram - Karim
 
 ## Inledning
 
-### Beskriv kortfattat syftet och funktionaliteten hos WebshopApplication.
+### Syfte och Funktionalitet
 
-WebshopApplication är designad för att tillhandahålla en fullt fungerande e-handelsplattform. Den integrerar användarautentisering, produktkatalog, varukorgshantering och en enkel checkout-process. Applikationen använder Spring Boot för backend och stöder RESTful API-anrop för frontend-interaktioner.
+WebshopApplication är en fullt fungerande e-handelsplattform med användarautentisering, 
+produktkatalog, varukorgshantering och en enkel checkout-process. Denna applikation använder 
+Spring Boot för backend och erbjuder RESTful API:er för frontend-interaktioner.
 
+### Initiala Tankar och Förväntningar
 
-### Vilka var dina initiala tankar och förväntningar när du började med uppgiften?
+Våra förväntningar när vi påbörjade detta projekt var att det skulle vara utmanande och lärorikt. 
+Vi fokuserade på att använda Spring Boot och JWT-autentisering samt att förbättra vår förståelse för REST API-design och 
+databasintegration med JPA.
 
-Jag förväntade mig att projektet skulle vara utmanande men lärorikt, med fokus på att tillämpa Spring Boot och säkerhetstekniker som JWT för autentisering. Jag såg också fram emot att förbättra min förståelse för REST API-design och databasintegration med JPA.
+## Planering och Genomförande
 
+### Utvecklingsplan
 
-## Planering och genomförande
+Planeringen inkluderade att definiera de grundläggande funktionerna och strukturera dem som användarhistorier. 
+Vi skapade även en projektplan med tydliga milstolpar för att hantera funktioner som användarhantering, 
+produktkatalog och varukorgssystem. Valet av tekniker och verktyg, inklusive Spring Boot, MySQL och JWT, 
+var en del av vår planering.
 
-### Beskriv hur du planerade utvecklingen av din WebshopApplication.
+### Utvecklingssteg
 
-Planeringen började med att definiera applikationens grundläggande funktioner och strukturera dem i användarhistorier. Vi skapade en projektplan med milestones för varje stor funktion, såsom användarhantering, produktkatalog, och varukorgssystem. Vi valde också tekniker och verktyg, som Spring Boot, MySQL och JWT.
+Utvecklingen av projektet inleddes med konfigureringen av projektets grundstruktur med hjälp av Maven och Spring Boot. 
+Därefter implementerade vi databasmodeller och repositories för användare och produkter. Vi byggde API:er för 
+användarregistrering och inloggning med JWT-autentisering. Slutligen utvecklade vi API:er för varukorgshantering och 
+checkout-funktionalitet.
 
-### Vilka steg genomförde du för att utveckla applikationen?
+## Utmaningar och Lösningar
 
-Vi började med att konfigurera projektets grundstruktur med Maven och Spring Boot. Sedan implementerade vi databasmodeller och repositories för användare och produkter. Vi byggde API:er för användarregistrering och inloggning med JWT-baserad autentisering. Slutligen skapade vi API:er för varukorgshantering och checkout-funktionalitet.
+### Största Utmaningar
 
-## Utmaningar och lösningar
+De största utmaningarna inkluderade att säkerställa säker användarautentisering och hantering av sessionslösa 
+förfrågningar med JWT. Integreringen av olika delar av applikationen var också en utmaning.
 
-### Vilka var de största utmaningarna du stötte på under utvecklingen av WebshopApplication?
+### Lösningar
 
-De största utmaningarna inkluderade att säkerställa säker användarautentisering och hantering av sessionslösa förfrågningar med JWT. Att integrera alla delar av applikationen.
+Vi löste säkerhetsutmaningarna genom att noga studera och implementera JWT och Spring Security. 
+För att hantera komplexiteten i projektet använde vi grundlig testning och regelbunden kodgranskning för att 
+säkerställa att alla delar av applikationen integrerades korrekt.
 
-### Hur löste du dessa utmaningar?
+## Reflektion och Utvärdering
 
-Vi löste säkerhetsutmaningarna genom att noga studera och implementera JWT och Spring Security. För att hantera komplexiteten i projektet använde jag mig av grundlig testning och regelbunden kodgranskning för att säkerställa att alla delar av applikationen integrerades.
+### Lärdomar
 
-## Reflektion och utvärdering
+Under processen att utveckla WebshopApplication lärde vi oss vikten av noggrann planering och strukturering av 
+stora projekt. Våra färdigheter i Spring Boot förbättrades och vi fick en djupare förståelse för hur man säkert 
+hanterar användarautentisering. Vi utvecklade även vår förmåga att skapa RESTful API:er och integrera databaser.
 
-### Vad lärde du dig från processen att utveckla WebshopApplication?
+### Framtida Förbättringar
 
-Jag lärde mig vikten av noggrann planering och strukturering av ett stort projekt. Jag förbättrade mina färdigheter i Spring Boot och förstod djupare hur man säkert hanterar användarautentisering. Jag blev också bättre på att skapa RESTful API:er och att integrera integration.
-
-### Hur skulle du förbättra ditt arbetssätt eller kod i framtida projekt?
-
-I framtida projekt skulle jag spendera mer tid på att planera och designa API:er och överväga fler säkerhetsaspekter från början. Jag skulle också implementera kontinuerlig integration och deployment (CI/CD) tidigt i projektet för att förbättra utvecklingsprocessen.
+I framtida projekt skulle vi prioritera planering och design av API:er från början och beakta säkerhetsaspekter 
+tidigt i projektet. Implementering av kontinuerlig integration och deployment (CI/CD) skulle också vara en prioritet 
+för att förbättra utvecklingsprocessen.
