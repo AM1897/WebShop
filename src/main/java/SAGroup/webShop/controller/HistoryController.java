@@ -33,11 +33,6 @@ public class HistoryController {
         this.userRepo = userRepo;
     }
 
-
-
-
-
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<String>> checkoutHistoryOfUsers(Principal principal) {
@@ -57,6 +52,5 @@ public class HistoryController {
         System.out.println("Printing the user : " + userName + " with their checkout history");
         return ResponseEntity.ok(historyService.historyOfOneUser(userName));
     }
-
 
 }

@@ -18,8 +18,9 @@ public class AdminMenu {
             System.out.println("2. Uppdatera användare");
             System.out.println("3. Ta bort användare");
             System.out.println("4. Hantera artiklar");
-            System.out.println("5. Logga ut");
-            System.out.println("6. Tillbaka till huvudmenyn");
+            System.out.println("5. Se alla användares kundvagnhistorik");
+            System.out.println("6. Logga ut");
+            System.out.println("7. Tillbaka till huvudmenyn");
             System.out.print("Val: ");
             String adminChoice = scanner.nextLine();
 
@@ -38,8 +39,11 @@ public class AdminMenu {
                     articleMenu.visaArticleMenu();
                     break;
                 case "5":
-                    return false;
+                    showAllUsersHistory();
+                    break;
                 case "6":
+                    return false;
+                case "7":
                     return true;
                 default:
                     System.out.println("Ogiltigt val, försök igen.");
@@ -86,4 +90,15 @@ public class AdminMenu {
             e.printStackTrace();
         }
     }
+    private void showAllUsersHistory() {
+        try {
+            String history = apiClient.getAllUsersHistory();
+            System.out.println("Alla användares kundvagnshistorik:");
+            System.out.println(history);
+        } catch (Exception e) {
+            System.out.println("Kunde inte hämta kundvagnshistoriken. Kontrollera din anslutning och försök igen.");
+            e.printStackTrace();
+        }
+    }
+
 }

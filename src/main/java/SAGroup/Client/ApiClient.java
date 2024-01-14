@@ -360,4 +360,52 @@ public class ApiClient {
 
 
 
+    public String getAllUsersHistory() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/history/all"))
+                .header("Authorization", "Bearer " + jwtToken)
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return response.body();
+        } else {
+            throw new IOException("Failed : HTTP error code : " + response.statusCode());
+        }
+    }
+
+
+    public String getUserHistory(String userName) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/history/" + userName))
+                .header("Authorization", "Bearer " + jwtToken)
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return response.body();
+        } else {
+            throw new IOException("Failed : HTTP error code : " + response.statusCode());
+        }
+    }
+    public String getCurrentUserHistory(String jwtToken) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/history/current")) // Ersätt "/history/current" med din faktiska endpoint
+                .header("Authorization", "Bearer " + jwtToken)
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return response.body();
+        } else {
+            throw new IOException("Failed to get user history: HTTP error code : " + response.statusCode());
+        }
+    }
+
 }
