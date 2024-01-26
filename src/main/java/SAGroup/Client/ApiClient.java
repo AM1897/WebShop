@@ -15,7 +15,6 @@ import java.net.http.HttpResponse.BodyHandlers;
 
 
 public class ApiClient {
-
     private HttpClient httpClient;
     private String baseUrl;
     private String jwtToken;
@@ -205,14 +204,14 @@ public class ApiClient {
     }
 
     // Metod för att hämta den aktuella användarens kundvagn
-    public String getShoppingCart(String jwtToken) throws IOException, InterruptedException {
+    public String getShoppingCart() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/shopping-carts"))
                 .header("Authorization", "Bearer " + jwtToken)
                 .GET()
                 .build();
 
-        HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
             return response.body();
@@ -221,11 +220,10 @@ public class ApiClient {
         }
     }
 
-
-    public String addArticleToShoppingCart(Long articleId, int quantity, String jwtToken) throws IOException, InterruptedException {
+    public String addArticleToShoppingCart(Long articleId, int quantity) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/shopping-carts/" + articleId + "/" + quantity))
-                .header("Authorization", "Bearer " + this.jwtToken)
+                .header("Authorization", "Bearer " + jwtToken)
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
 
@@ -238,10 +236,10 @@ public class ApiClient {
         }
     }
 
-    public String removeArticleFromShoppingCart(Long articleId, String jwtToken) throws IOException, InterruptedException {
+    public String removeArticleFromShoppingCart(Long articleId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/shopping-carts/remove-article/" + articleId)) // Antag att du har en endpoint för detta
-                .header("Authorization", "Bearer " + this.jwtToken)
+                .uri(URI.create(baseUrl + "/shopping-carts/remove-article/" + articleId))
+                .header("Authorization", "Bearer " + jwtToken)
                 .DELETE()
                 .build();
 
@@ -254,10 +252,10 @@ public class ApiClient {
         }
     }
 
-    public String checkout(String jwtToken) throws IOException, InterruptedException {
+    public String checkout() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/shopping-carts/checkout"))
-                .header("Authorization", "Bearer " + this.jwtToken)
+                .header("Authorization", "Bearer " + jwtToken)
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
 
@@ -269,6 +267,7 @@ public class ApiClient {
             throw new IOException("Checkout failed: HTTP error code : " + response.statusCode());
         }
     }
+
 
     public String createArticle(Article article) {
         try {

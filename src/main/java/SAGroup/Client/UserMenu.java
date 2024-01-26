@@ -5,13 +5,12 @@ import java.util.Scanner;
 public class UserMenu {
     private ApiClient apiClient;
     private Scanner scanner;
-    private String jwtToken;
     private String currentUsername;
 
-    public UserMenu(ApiClient apiClient, Scanner scanner, String jwtToken, String currentUsername) {
+    // Ta bort jwtToken från konstruktören
+    public UserMenu(ApiClient apiClient, Scanner scanner, String currentUsername) {
         this.apiClient = apiClient;
         this.scanner = scanner;
-        this.jwtToken = jwtToken;
         this.currentUsername = currentUsername;
     }
 
@@ -41,7 +40,7 @@ public class UserMenu {
                     }
                     break;
                 case "4":
-                    ShoppingCartMenu shoppingCartMenu = new ShoppingCartMenu(apiClient, scanner, jwtToken);
+                    ShoppingCartMenu shoppingCartMenu = new ShoppingCartMenu(apiClient, scanner);
                     shoppingCartMenu.visaShoppingCartMenu();
                     break;
                 case "5":
