@@ -57,12 +57,15 @@ public class ApplicationRunner {
         try {
             boolean loggedIn = authHandler.login(username, password);
             if (loggedIn) {
-                // Borttagen begäran om JWT-token. Använd token som hanteras av ApiClient
+                System.out.print("Ange din JWT-token: ");
+                String jwtToken = scanner.nextLine();
+                apiClient.setJwtToken(jwtToken);
                 if (isAdmin) {
                     AdminMenu adminMenu = new AdminMenu(apiClient, scanner);
                     adminMenu.visaAdminMenu();
                 } else {
-                    UserMenu userMenu = new UserMenu(apiClient, scanner, username);
+                    // Här skapas en instans av UserMenu med alla fyra parametrar
+                    UserMenu userMenu = new UserMenu(apiClient, scanner, jwtToken, username);
                     userMenu.visaUserMenu();
                 }
             } else {

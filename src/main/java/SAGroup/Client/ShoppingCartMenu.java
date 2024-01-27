@@ -6,10 +6,12 @@ import java.util.Scanner;
 public class ShoppingCartMenu {
     private ApiClient apiClient;
     private Scanner scanner;
+    private String jwtToken; // För att lagra JWT-token
 
-    public ShoppingCartMenu(ApiClient apiClient, Scanner scanner) {
+    public ShoppingCartMenu(ApiClient apiClient, Scanner scanner, String jwtToken) {
         this.apiClient = apiClient;
         this.scanner = scanner;
+        this.jwtToken = jwtToken;
     }
 
     public void visaShoppingCartMenu() {
@@ -47,7 +49,7 @@ public class ShoppingCartMenu {
 
     private void viewShoppingCart() {
         try {
-            String cartContents = apiClient.getShoppingCart();
+            String cartContents = apiClient.getShoppingCart(jwtToken); // Uppdaterat för att skicka JWT-token
             System.out.println("Din kundvagn:");
             System.out.println(cartContents);
         } catch (IOException | InterruptedException e) {
@@ -62,7 +64,7 @@ public class ShoppingCartMenu {
         System.out.print("Ange kvantiteten: ");
         int quantity = Integer.parseInt(scanner.nextLine());
         try {
-            String result = apiClient.addArticleToShoppingCart(articleId, quantity);
+            String result = apiClient.addArticleToShoppingCart(articleId, quantity, jwtToken); // Uppdaterat för att skicka JWT-token
             System.out.println(result);
         } catch (IOException | InterruptedException e) {
             System.out.println("Ett fel inträffade när artikeln skulle läggas till: " + e.getMessage());
@@ -74,7 +76,7 @@ public class ShoppingCartMenu {
         System.out.print("Ange artikelns ID som du vill ta bort från kundvagnen: ");
         Long articleId = Long.parseLong(scanner.nextLine());
         try {
-            String result = apiClient.removeArticleFromShoppingCart(articleId);
+            String result = apiClient.removeArticleFromShoppingCart(articleId, jwtToken); // Uppdaterat för att skicka JWT-token
             System.out.println(result);
         } catch (IOException | InterruptedException e) {
             System.out.println("Ett fel inträffade när artikeln skulle tas bort: " + e.getMessage());
@@ -84,7 +86,7 @@ public class ShoppingCartMenu {
 
     private void checkout() {
         try {
-            String checkoutResult = apiClient.checkout();
+            String checkoutResult = apiClient.checkout(jwtToken); // Uppdaterat för att skicka JWT-token
             System.out.println(checkoutResult);
         } catch (IOException | InterruptedException e) {
             System.out.println("Ett fel inträffade vid utcheckningen: " + e.getMessage());
