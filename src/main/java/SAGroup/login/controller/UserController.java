@@ -48,6 +48,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
         }
     }
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<UserEntity> getCurrentUser(Principal principal) {
+        String username = principal.getName();
+        UserEntity user = userService.findByUsername(username);
+        if (user != null) {
+            user.setPassword(null);
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
