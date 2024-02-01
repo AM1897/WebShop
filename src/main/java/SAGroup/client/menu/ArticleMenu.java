@@ -131,8 +131,6 @@ public class ArticleMenu {
         System.out.println("Ny mängd (lämna blankt om inga ändringar):");
         String amount = scanner.nextLine();  // Ändrade från int till String för att tillåta blank inmatning
 
-        // Bygger JSON-strängen med de insamlade uppgifterna
-        // Använder ternary-operatorn för att inkludera fält endast om de inte är tomma
         String articleDetailsJson = String.format(
                 "{%s%s%s%s}",
                 name.isEmpty() ? "" : String.format("\"name\": \"%s\"", name),

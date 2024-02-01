@@ -8,10 +8,6 @@ public class ArticleDTO {
     private String price;
     private int amount;
 
-    // Standardkonstruktorer, getters och setters
-
-    public ArticleDTO() {
-    }
 
     public ArticleDTO(Long id, String name, String description, String price, int amount) {
         this.id = id;

@@ -21,13 +21,13 @@ public class ShoppingCartController {
 
     private final ShoppingCartService shoppingCartService;
     private final UserRepo userRepo;
+
     @Autowired
     public ShoppingCartController(ShoppingCartService shoppingCartService, UserRepo userRepo) {
         this.shoppingCartService = shoppingCartService;
         this.userRepo = userRepo;
     }
 
-    // It's not needed because when the user is created the shopping cart is created automatically.
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<ShoppingCart> createShoppingCart(Principal principal) {
@@ -75,23 +75,6 @@ public class ShoppingCartController {
         return ResponseEntity.ok("Article added to the shopping cart successfully");
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/all")
-    public ResponseEntity<List<ShoppingCartDTO>> getAllShoppingCarts() {
-        List<ShoppingCartDTO> userShoppingCarts = shoppingCartService.getUserShoppingCarts();
-        return new ResponseEntity<>(userShoppingCarts, HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteShoppingCart(@PathVariable Long id) {
-        shoppingCartService.deleteShoppingCart(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-
-
-
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping("/checkout")
     public ResponseEntity<String> checkout(Principal principal) {
@@ -107,13 +90,26 @@ public class ShoppingCartController {
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/checkout")
-    public ResponseEntity<List <CheckoutHistoryDTO>> checkoutHistory(Principal principal) {
+    public ResponseEntity<List<CheckoutHistoryDTO>> checkoutHistory(Principal principal) {
         UserEntity user = userRepo.findByUsername(principal.getName()).orElse(null);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        System.out.println("Username: " + user.getUsername() + " checkout history: " );
+        System.out.println("Username: " + user.getUsername() + " checkout history: ");
         return ResponseEntity.ok(shoppingCartService.checkoutHistory(user.getUsername()));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/all")
+    public ResponseEntity<List<ShoppingCartDTO>> getAllShoppingCarts() {
+        List<ShoppingCartDTO> userShoppingCarts = shoppingCartService.getUserShoppingCarts();
+        return new ResponseEntity<>(userShoppingCarts, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteShoppingCart(@PathVariable Long id) {
+        shoppingCartService.deleteShoppingCart(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

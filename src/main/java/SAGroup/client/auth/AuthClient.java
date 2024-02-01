@@ -54,7 +54,6 @@ public class AuthClient {
     private void handleResponse(HttpResponse<String> response) {
         if (response.statusCode() >= 400) {
             System.out.println("Error: " + response.statusCode() + " " + response.body());
-            // Här kan du lägga till ytterligare logik beroende på statuskoden
         }
     }
 }

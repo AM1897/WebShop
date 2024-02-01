@@ -164,7 +164,6 @@ public class ShoppingCartService {
         checkoutHistoryRepo.findByUser(userName).forEach(article -> {
 
             ArticleDTO articleDTO = new ArticleDTO();
-            // id, name, description, price,
             articleDTO.setId(article.getId());
             articleDTO.setName(article.getName());
             articleDTO.setDescription(article.getDescription());

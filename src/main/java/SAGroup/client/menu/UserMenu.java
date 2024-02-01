@@ -1,5 +1,6 @@
 package SAGroup.client.menu;
 
+import SAGroup.client.history.HistoryClient;
 import SAGroup.client.user.UserClient;
 
 import java.io.IOException;
@@ -17,7 +18,8 @@ public class UserMenu {
             System.out.println("2. Ändra mitt lösenord");
             System.out.println("3. Ta bort mitt konto");
             System.out.println("4. Hantera min kundvagn");
-            System.out.println("5. Logga ut och återgå till huvudmenyn");
+            System.out.println("5. Visa min kundvagnshistorik");
+            System.out.println("6. Logga ut och återgå till huvudmenyn");
             System.out.print("Val: ");
 
             String choice = scanner.nextLine();
@@ -26,20 +28,19 @@ public class UserMenu {
                     showMyInfo(token);
                     break;
                 case "2":
-                    // Ändra lösenord
-                    changePassword(userClient, token);
+                    changePassword(userClient, token);// Ändra lösenord
                     break;
                 case "3":
-                    // Ta bort konto
-                    deleteAccount(userClient, token);
+                    deleteAccount(userClient, token);// Ta bort konto
                     break;
                 case "4":
-                    // Hantera kundvagn
-                    manageCart(userClient, token);
+                    manageCart(token);// Hantera kundvagn
                     break;
                 case "5":
-                    // Logga ut och återgå till huvudmenyn
-                    return;
+                    showMyCheckoutHistory(token);
+                    break;
+                case "6":
+                    return; // Logga ut och återgå till huvudmenyn
                 default:
                     System.out.println("Ogiltigt val. Försök igen.");
             }
@@ -56,7 +57,6 @@ public class UserMenu {
         }
     }
 
-
     private static void changePassword(UserClient userClient, String token) {
         System.out.println("Ange ditt gamla lösenord:");
         String oldPassword = scanner.nextLine();
@@ -70,7 +70,6 @@ public class UserMenu {
             return;
         }
 
-        // Skapa JSON-strängen för lösenordsändring
         String passwordChangeJson = String.format("{\"oldPassword\": \"%s\", \"newPassword\": \"%s\", \"confirmPassword\": \"%s\"}", oldPassword, newPassword, confirmPassword);
 
         try {
@@ -93,14 +92,23 @@ public class UserMenu {
         try {
             String response = userClient.deleteMyAccount();
             System.out.println("Svar från servern: " + response);
-            // Användaren har tagit bort sitt konto, så logga ut dem
-            return;
         } catch (IOException | InterruptedException e) {
             System.out.println("Kunde inte ta bort konto: " + e.getMessage());
         }
     }
 
-    private static void manageCart(UserClient userClient, String token) {
-        // Implementera logik för att hantera kundvagn
+    // Hantera kundvagn
+    private static void manageCart(String token) {
+        ShoppingCartMenu.showMenu(token);// Öppnar ShoppingCartMenu med den angivna token
+    }
+
+    private static void showMyCheckoutHistory(String token) {
+        HistoryClient historyClient = new HistoryClient("http://localhost:8080", token);
+        try {
+            String history = historyClient.getMyCheckoutHistory();
+            System.out.println("Min kundvagnshistorik:\n" + history);
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Kunde inte hämta min kundvagnshistorik: " + e.getMessage());
+        }
     }
 }

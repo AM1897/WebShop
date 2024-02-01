@@ -27,10 +27,21 @@ public class HistoryController {
     private final UserRepo userRepo;
 
     @Autowired
-    public HistoryController(ShoppingCartService shoppingCartService, HistoryService historyService ,UserRepo userRepo) {
+    public HistoryController(ShoppingCartService shoppingCartService, HistoryService historyService, UserRepo userRepo) {
         this.shoppingCartService = shoppingCartService;
         this.historyService = historyService;
         this.userRepo = userRepo;
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/my-history")
+    public ResponseEntity<List<CheckoutHistoryDTO>> getMyCheckoutHistory(Principal principal) {
+        String currentUserName = principal.getName();
+        List<CheckoutHistoryDTO> myHistory = historyService.getMyCheckoutHistory(currentUserName);
+        if (myHistory.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(myHistory);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

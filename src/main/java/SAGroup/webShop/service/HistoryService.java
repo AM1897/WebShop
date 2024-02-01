@@ -79,4 +79,8 @@ public class HistoryService {
         return historyDTO;
 
     }
+    public List<CheckoutHistoryDTO> getMyCheckoutHistory(String currentUserName) {
+        return historyOfOneUser(currentUserName);
+    }
+
 }
